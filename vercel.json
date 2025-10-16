@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/documentatie/wordtopdf/index.html",
+      "destination": "/wordtopdf",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/wordtopdf",
+      "destination": "/documentatie/wordtopdf/index.html"
+    }
+  ]
+}
