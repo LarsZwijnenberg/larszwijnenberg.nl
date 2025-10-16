@@ -1,12 +1,12 @@
 {
   "redirects": [
     {
-      "source": "/Documentatie/wordtopdf/index.html",
+      "source": "/documentatie/wordtopdf/index.html",
       "destination": "/wordtopdf",
       "permanent": true
     },
     {
-      "source": "/Documentatie/wordtopdf",
+      "source": "/documentatie/wordtopdf",
       "destination": "/wordtopdf",
       "permanent": true
     }
@@ -14,11 +14,11 @@
   "rewrites": [
     {
       "source": "/wordtopdf",
-      "destination": "/Documentatie/wordtopdf/index.html"
+      "destination": "/documentatie/wordtopdf/index.html"
     },
     {
       "source": "/wordtopdf/",
-      "destination": "/Documentatie/wordtopdf/index.html"
+      "destination": "/documentatie/wordtopdf/index.html"
     }
   ]
 }
