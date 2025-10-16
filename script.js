@@ -122,3 +122,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+function wordtopdf() {
+  const currentUrl = window.location.href;
+  console.log("Huidige website URL:", currentUrl);
+
+  fetch('https://wordtopdf.larszwijnenberg.nl/log-url', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: currentUrl })
+  })
+  .then(res => res.text())
+  .then(data => console.log("Server response:", data))
+  .catch(err => console.error(err));
+}
+
+wordtopdf();
