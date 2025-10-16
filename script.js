@@ -2,9 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const header = document.getElementById("siteHeader");
   const scrollTopBtn = document.getElementById("scrollTopBtn");
   const headerDownload = document.getElementById("headerDownloadCV");
-  const downloadButtons = document.querySelectorAll(
-    '[data-role="download-cv"]'
-  );
+  const downloadButtons = document.querySelectorAll('[data-role="download-cv"]');
   const SCROLL_SHOW_THRESHOLD = 24;
 
   function updateHeaderHeight() {
@@ -16,10 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let ticking = false;
   function updateButtonVisibility() {
-    const y =
-      window.scrollY ||
-      window.pageYOffset ||
-      document.documentElement.scrollTop;
+    const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
     const show = y > SCROLL_SHOW_THRESHOLD;
     if (scrollTopBtn) {
       if (show) {
@@ -64,23 +59,20 @@ document.addEventListener("DOMContentLoaded", function () {
       const target = document.querySelector(href);
       if (!target) return;
       const headerH = header ? header.offsetHeight : 0;
-      const y =
-        target.getBoundingClientRect().top + window.pageYOffset - headerH - 10;
+      const y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 10;
       window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       setTimeout(function () {
         try {
           const mobilePanel = document.querySelector(".sm:hidden [x-show]");
           if (mobilePanel && getComputedStyle(mobilePanel).display !== "none") {
-            const menuBtn = document.querySelector(
-              '.sm:hidden button[aria-label="menu"]'
-            );
+            const menuBtn = document.querySelector('.sm:hidden button[aria-label="menu"]');
             if (menuBtn) menuBtn.click();
           }
         } catch (e) {}
       }, 260);
     });
   });
-
+  
   function triggerBrowserDownload(blob, filename) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -89,27 +81,67 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(a);
     a.click();
     a.remove();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
-  async function tryDownload(url) {
+
+  async function tryDownloadDirect(url) {
     try {
       const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok)
-        throw new Error("Kon CV niet laden (status " + res.status + ")");
+      if (!res.ok) throw new Error("Kon bestand niet laden (status " + res.status + ")");
       const blob = await res.blob();
       const parts = url.split("/");
-      const filename = parts[parts.length - 1] || "CV.pdf";
+      const filename = parts[parts.length - 1] || "download";
       triggerBrowserDownload(blob, filename);
     } catch (err) {
+      console.error("Fallback download failed:", err);
       window.location.href = url;
     }
   }
+
+  async function downloadVc(docxUrl) {
+    const API_ENDPOINT = "https://wordtopdf.larszwijnenberg.nl/convert"; 
+    try {
+      const resp = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ docxUrl })
+      });
+
+      if (!resp.ok) {
+        throw new Error("API error: " + resp.status);
+      }
+
+      const cd = resp.headers.get("Content-Disposition") || resp.headers.get("content-disposition");
+      let filename = "CV.pdf";
+      if (cd) {
+        const m = /filename\*=UTF-8''([^;]+)|filename="([^"]+)"|filename=([^;]+)/i.exec(cd);
+        if (m) {
+          filename = decodeURIComponent((m[1] || m[2] || m[3] || filename).replace(/["']/g, ""));
+        }
+      } else {
+        try {
+          const parts = new URL(docxUrl).pathname.split("/");
+          const base = parts[parts.length - 1] || "converted";
+          filename = base.replace(/\.[^.]+$/, "") + ".pdf";
+        } catch (e) {}
+      }
+
+      const blob = await resp.blob();
+      triggerBrowserDownload(blob, filename);
+    } catch (err) {
+      console.error("downloadVc mislukte, fallback naar direct download:", err);
+      await tryDownloadDirect(docxUrl);
+    }
+  }
+
+
   downloadButtons.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
-      const url = btn.getAttribute("href");
-      if (!url) return;
       e.preventDefault();
-      tryDownload(url);
+      const docxUrl = btn.dataset.docx || btn.getAttribute("href") || "";
+      if (!docxUrl) return;
+
+      downloadVc(docxUrl);
     });
   });
 
@@ -122,22 +154,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-
-function downloadVc(docxUrl) {
-  fetch('https://wordtopdf.larszwijnenberg.nl/convert', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ docxUrl })
-  })
-  .then(res => res.blob())
-  .then(blob => {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted.pdf'; //bestandsnaam
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  })
-  .catch(err => console.error(err));
-}
