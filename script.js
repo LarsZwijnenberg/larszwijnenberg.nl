@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					if (menuBtn) menuBtn.click();
 				}
 			} catch (e) {
-				// silent
 			}
 		}, 260);
 	}
