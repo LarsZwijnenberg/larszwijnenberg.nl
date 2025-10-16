@@ -123,18 +123,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function wordtopdf() {
-  const currentUrl = window.location.href;
-  console.log("Huidige website URL:", currentUrl);
-
-  fetch('https://wordtopdf.larszwijnenberg.nl/log-url', {
+function downloadVc(docxUrl) {
+  fetch('https://wordtopdf.larszwijnenberg.nl/convert', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: currentUrl })
+    body: JSON.stringify({ docxUrl })
   })
-  .then(res => res.text())
-  .then(data => console.log("Server response:", data))
+  .then(res => res.blob())
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'converted.pdf'; //bestandsnaam
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  })
   .catch(err => console.error(err));
 }
-
-wordtopdf();
