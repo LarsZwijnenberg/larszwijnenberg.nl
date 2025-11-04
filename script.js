@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   window.addEventListener("scroll", onScroll, { passive: true });
-
   window.addEventListener("load", updateButtonVisibility);
   window.addEventListener("hashchange", updateButtonVisibility);
 
@@ -72,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 260);
     });
   });
-  
+
   function triggerBrowserDownload(blob, filename) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function downloadVc(docxUrl) {
-    const API_ENDPOINT = "https://wordtopdf.larszwijnenberg.nl/convert"; 
+    const API_ENDPOINT = "https://wordtopdf.larszwijnenberg.nl/convert";
     try {
       const resp = await fetch(API_ENDPOINT, {
         method: "POST",
@@ -108,7 +107,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       if (!resp.ok) {
-        throw new Error("API error: " + resp.status);
+        let text = "";
+        try {
+          text = await resp.text();
+          if (text.length > 500) text = text.slice(0, 500) + "…";
+        } catch (e) {
+          text = resp.statusText || "";
+        }
+        throw new Error("API error: " + resp.status + (text ? " — " + text : ""));
       }
 
       const cd = resp.headers.get("Content-Disposition") || resp.headers.get("content-disposition");
@@ -129,18 +135,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const blob = await resp.blob();
       triggerBrowserDownload(blob, filename);
     } catch (err) {
-      console.error("downloadVc mislukte, fallback naar direct download:", err);
-      await tryDownloadDirect(docxUrl);
+      console.error("downloadVc mislukte:", err);
+      alert("Download mislukt: " + (err && err.message ? err.message : "Onbekende fout"));
     }
   }
-
 
   downloadButtons.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       const docxUrl = btn.dataset.docx || btn.getAttribute("href") || "";
       if (!docxUrl) return;
-
       downloadVc(docxUrl);
     });
   });
