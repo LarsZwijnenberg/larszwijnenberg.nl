@@ -83,19 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
-  async function tryDownloadDirect(url) {
-    try {
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error("Kon bestand niet laden (status " + res.status + ")");
-      const blob = await res.blob();
-      const parts = url.split("/");
-      const filename = parts[parts.length - 1] || "download";
-      triggerBrowserDownload(blob, filename);
-    } catch (err) {
-      console.error("Fallback download failed:", err);
-      window.location.href = url;
-    }
-  }
 
   async function downloadVc(docxUrl) {
     const API_ENDPOINT = "https://wordtopdf.larszwijnenberg.nl/convert";
