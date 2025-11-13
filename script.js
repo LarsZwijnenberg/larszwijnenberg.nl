@@ -84,55 +84,39 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  async function downloadVc(docxUrl) {
-    const API_ENDPOINT = "https://wordtopdf.larszwijnenberg.nl/convert";
+  async function downloadVc(pdfUrl) {
     try {
-      const resp = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ docxUrl })
-      });
+      // Bepaal de filename van de URL
+      let filename = "CV.pdf";
+      try {
+        const parts = new URL(pdfUrl).pathname.split("/");
+        filename = parts[parts.length - 1] || "CV.pdf";
+      } catch (e) {}
+
+      // Haal het PDF bestand direct op
+      const resp = await fetch(pdfUrl);
 
       if (!resp.ok) {
-        let text = "";
-        try {
-          text = await resp.text();
-          if (text.length > 500) text = text.slice(0, 500) + "…";
-        } catch (e) {
-          text = resp.statusText || "";
-        }
-        throw new Error("API error: " + resp.status + (text ? " — " + text : ""));
-      }
-
-      const cd = resp.headers.get("Content-Disposition") || resp.headers.get("content-disposition");
-      let filename = "CV.pdf";
-      if (cd) {
-        const m = /filename\*=UTF-8''([^;]+)|filename="([^"]+)"|filename=([^;]+)/i.exec(cd);
-        if (m) {
-          filename = decodeURIComponent((m[1] || m[2] || m[3] || filename).replace(/["']/g, ""));
-        }
-      } else {
-        try {
-          const parts = new URL(docxUrl).pathname.split("/");
-          const base = parts[parts.length - 1] || "converted";
-          filename = base.replace(/\.[^.]+$/, "") + ".pdf";
-        } catch (e) {}
+        throw new Error("PDF ophalen mislukt: " + resp.status);
       }
 
       const blob = await resp.blob();
       triggerBrowserDownload(blob, filename);
     } catch (err) {
       console.error("downloadVc mislukte:", err);
-      alert("Download mislukt: " + (err && err.message ? err.message : "Onbekende fout"));
+      alert(
+        "Download mislukt: " +
+          (err && err.message ? err.message : "Onbekende fout")
+      );
     }
   }
 
   downloadButtons.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
-      const docxUrl = btn.dataset.docx || btn.getAttribute("href") || "";
-      if (!docxUrl) return;
-      downloadVc(docxUrl);
+      const pdfUrl = btn.dataset.docx || btn.getAttribute("href") || "";
+      if (!pdfUrl) return;
+      downloadVc(pdfUrl);
     });
   });
 
