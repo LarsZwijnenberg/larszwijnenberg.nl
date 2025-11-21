@@ -86,14 +86,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function downloadVc(pdfUrl) {
     try {
-      // Bepaal de filename van de URL
-      let filename = "CV.pdf";
+      let filename = "Lars_Zwijnenberg_CV.pdf";
       try {
         const parts = new URL(pdfUrl).pathname.split("/");
-        filename = parts[parts.length - 1] || "CV.pdf";
+        filename = parts[parts.length - 1] || "Lars_Zwijnenberg_CV.pdf";
       } catch (e) {}
 
-      // Haal het PDF bestand direct op
       const resp = await fetch(pdfUrl);
 
       if (!resp.ok) {
