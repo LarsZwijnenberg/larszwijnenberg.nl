@@ -25,6 +25,7 @@
 				<a href="#about" data-scroll class="nav-link">Over Mij</a>
 				<a href="#experience" data-scroll class="nav-link">Ervaring</a>
 				<a href="#skills" data-scroll class="nav-link">Vaardigheden</a>
+				<a href="#team" data-scroll class="nav-link">Team Lars</a>
 				<a href="#contact" data-scroll class="nav-link">Contact</a>
 			</div>
 			<div class="mobile-menu" x-data="{ open: false }">
@@ -41,6 +42,7 @@
 						<a @click="open = false" href="#about" data-scroll class="mobile-menu-link">Over Mij</a>
 						<a @click="open = false" href="#experience" data-scroll class="mobile-menu-link">Ervaring</a>
 						<a @click="open = false" href="#skills" data-scroll class="mobile-menu-link">Vaardigheden</a>
+						<a @click="open = false" href="#team" data-scroll class="mobile-menu-link">Team Lars</a>
 						<a @click="open = false" href="#contact" data-scroll class="mobile-menu-link">Contact</a>
 					</nav>
 				</div>
@@ -165,6 +167,106 @@
 					<div class="skill-bar-label">Back-end / Logica</div>
 					<div class="skill-bar-container">
 						<div class="skill-bar skill-bar-backend"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="team" class="section-card persona-section">
+			<div class="persona-grid">
+				<div class="persona-copy">
+					<p class="persona-eyebrow">Onze specialisten</p>
+					<h2 class="section-title">Team Lars</h2>
+					<p class="section-text">Eén persoon, meerdere petten. Kies de Lars die je nodig hebt en switch tussen disciplines zonder context te verliezen.</p>
+					<ul class="persona-highlights">
+						<li>Front-end finesse en back-end logica in één team.</li>
+						<li>Retailervaring voor procesbewaking en klantgevoel.</li>
+						<li>Storytelling skills dankzij de RTV Sternet-stage.</li>
+					</ul>
+				</div>
+				<div class="persona-slider-shell" data-persona-slider>
+					<div class="persona-counter">
+						<div class="persona-count">
+							<span data-persona-current>01</span>
+							<span class="persona-count-divider">/</span>
+							<span data-persona-total>04</span>
+						</div>
+						<p class="persona-counter-role" data-persona-role>Front-end developer</p>
+					</div>
+					<div class="persona-viewport" data-persona-viewport>
+						<div class="persona-track" data-persona-track>
+							<article class="persona-slide" data-persona-slide data-role="Front-end developer">
+								<div class="persona-photo">
+									<img src="media/fotos/lars-frontend.png" alt="Lars als Front-end developer" loading="lazy" />
+								</div>
+								<div class="persona-info">
+									<h3 class="persona-name">Lars</h3>
+									<p class="persona-role">Front-end developer</p>
+									<p class="persona-description">Bouwt intuïtieve interfaces, polijst micro-interacties en let scherp op performance en toegankelijkheid.</p>
+									<div class="persona-tags">
+										<span class="persona-tag">UI systems</span>
+										<span class="persona-tag">Accessibility</span>
+									</div>
+								</div>
+							</article>
+							<article class="persona-slide" data-persona-slide data-role="Back-end developer">
+								<div class="persona-photo">
+									<img src="media/fotos/lars-backend.png" alt="Lars als Back-end developer" loading="lazy" />
+								</div>
+								<div class="persona-info">
+									<h3 class="persona-name">Lars</h3>
+									<p class="persona-role">Back-end developer</p>
+									<p class="persona-description">Ontwerpt API's, bewaakt dataflows en zorgt dat logica solide draait, of het nu C# of JavaScript is.</p>
+									<div class="persona-tags">
+										<span class="persona-tag">C#</span>
+										<span class="persona-tag">API design</span>
+									</div>
+								</div>
+							</article>
+							<article class="persona-slide" data-persona-slide data-role="Allround winkelmedewerker">
+								<div class="persona-photo">
+									<img src="media/fotos/lars-allround.png" alt="Lars als allround winkelmedewerker" loading="lazy" />
+								</div>
+								<div class="persona-info">
+									<h3 class="persona-name">Lars</h3>
+									<p class="persona-role">Allround winkelmedewerker</p>
+									<p class="persona-description">Houdt overzicht op de vloer, schakelt met klanten en bewaakt processen—skills die direct meenemen naar digitale projecten.</p>
+									<div class="persona-tags">
+										<span class="persona-tag">Procesbewaking</span>
+										<span class="persona-tag">Klantcontact</span>
+									</div>
+								</div>
+							</article>
+							<article class="persona-slide" data-persona-slide data-role="Stagiair RTV Sternet">
+								<div class="persona-photo">
+									<img src="media/fotos/lars-stagiair.png" alt="Lars als stagiair RTV Sternet" loading="lazy" />
+								</div>
+								<div class="persona-info">
+									<h3 class="persona-name">Lars</h3>
+									<p class="persona-role">Stagiair RTV Sternet</p>
+									<p class="persona-description">Combineert techniek met storytelling: camerawerk, montage en planning voor omroepprojecten.</p>
+									<div class="persona-tags">
+										<span class="persona-tag">Storytelling</span>
+										<span class="persona-tag">Video</span>
+									</div>
+								</div>
+							</article>
+						</div>
+					</div>
+					<div class="persona-controls">
+						<div class="persona-dots" data-persona-dots></div>
+						<div class="persona-nav-buttons">
+							<button class="persona-nav-btn" data-persona-prev aria-label="Vorige Lars" type="button">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+								</svg>
+							</button>
+							<button class="persona-nav-btn" data-persona-next aria-label="Volgende Lars" type="button">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
